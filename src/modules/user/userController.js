@@ -46,6 +46,18 @@ class UserController {
     const resDoc = responseHandler(200, 'user update successfully', user);
     res.status(resDoc.statusCode).json(resDoc);
   });
+
+  /**
+   * delete user controller method
+   * @route GET /:id
+   * @access private
+   */
+  deleteUser = catchErrors(async (req, res, next) => {
+    const { id } = req.params;
+    await userService.deleteById(id);
+    const resDoc = responseHandler(200, 'user delete successfully');
+    res.status(resDoc.statusCode).json(resDoc);
+  });
 }
 
 export default new UserController();
