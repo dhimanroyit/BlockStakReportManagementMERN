@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { ConflictError } from '../../utils/errors.js';
+import { ConflictError, NotFoundError } from '../../utils/errors.js';
 import BaseService from '../base/baseService.js';
 import userRepository from './userRepository.js';
 
@@ -40,6 +40,18 @@ class UserService extends BaseService {
     const userRes = { ...user._doc };
     delete userRes.password;
     return userRes;
+  }
+
+  /**
+   * get single user method
+   * @param {ObjectId} id - id must be mongodb object id
+   * @returns {object} user data
+   * @throws {NotFoundError} - if user not found
+   */
+  async findById(id) {
+    const user = await super.findById(id, { select: '-password' });
+    if (!user) throw new NotFoundError('User Not Found by id');
+    return user;
   }
 }
 

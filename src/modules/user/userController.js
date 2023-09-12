@@ -19,6 +19,18 @@ class UserController {
     const resDoc = responseHandler(201, 'user signup successfully', data);
     res.status(resDoc.statusCode).json(resDoc);
   });
+
+  /**
+   * get single user controller method
+   * @route GET /:id
+   * @access private
+   */
+  getUser = catchErrors(async (req, res, next) => {
+    const { id } = req.params;
+    const user = await userService.findById(id);
+    const resDoc = responseHandler(200, 'user get successfully', user);
+    res.status(resDoc.statusCode).json(resDoc);
+  });
 }
 
 export default new UserController();
