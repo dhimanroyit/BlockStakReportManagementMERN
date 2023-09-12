@@ -4,8 +4,10 @@ import userController from '../../modules/user/userController.js';
 const userRouter = Router();
 
 userRouter.post('/signup', userController.signUpUser);
-userRouter.get('/:id', userController.getUser);
-userRouter.put('/:id', userController.updateUser);
-userRouter.delete('/:id', userController.deleteUser);
+userRouter
+  .route('/:id')
+  .get(userController.getUser)
+  .put(userController.updateUser)
+  .delete(userController.deleteUser);
 
 export default userRouter;
