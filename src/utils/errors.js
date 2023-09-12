@@ -10,7 +10,7 @@ export class GeneralError extends Error {
   }
 }
 
-export class BadRequest extends GeneralError {
+export class BadRequestError extends GeneralError {
   constructor(message) {
     super(message);
     this.name = 'BadRequestError';
@@ -20,7 +20,7 @@ export class BadRequest extends GeneralError {
   }
 }
 
-export class Unauthorized extends GeneralError {
+export class UnauthorizedError extends GeneralError {
   constructor(message) {
     super(message);
     this.name = 'UnauthorizedError';
@@ -30,12 +30,22 @@ export class Unauthorized extends GeneralError {
   }
 }
 
-export class NotFound extends GeneralError {
+export class NotFoundError extends GeneralError {
   constructor(message) {
     super(message);
     this.name = 'NotFoundError';
   }
   getErrorCode() {
     return 404;
+  }
+}
+
+export class ConflictError extends GeneralError {
+  constructor(message) {
+    super(message);
+    this.name = 'ConflictError';
+  }
+  getErrorCode() {
+    return 409;
   }
 }

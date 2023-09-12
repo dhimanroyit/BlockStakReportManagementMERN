@@ -1,4 +1,9 @@
-import { BadRequest, NotFound, Unauthorized } from '../../utils/errors.js';
+import {
+  BadRequestError,
+  ConflictError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../../utils/errors.js';
 
 /**
  * global error handler middleware for different type custom error check
@@ -12,11 +17,13 @@ import { BadRequest, NotFound, Unauthorized } from '../../utils/errors.js';
 const globalErrorHandler = (err, req, res, next) => {
   // default http status code for general error
   let code = 500;
-  if (err instanceof BadRequest) {
+  if (err instanceof BadRequestError) {
     code = err.getErrorCode();
-  } else if (err instanceof Unauthorized) {
+  } else if (err instanceof UnauthorizedError) {
     code = err.getErrorCode();
-  } else if (err instanceof NotFound) {
+  } else if (err instanceof NotFoundError) {
+    code = err.getErrorCode();
+  } else if (err instanceof ConflictError) {
     code = err.getErrorCode();
   }
 
