@@ -19,7 +19,7 @@ app.use(cors());
 dbConnect();
 
 // root router
-app.use(router);
+app.use('/api', router);
 
 // handle all error
 app.use(globalErrorHandler);

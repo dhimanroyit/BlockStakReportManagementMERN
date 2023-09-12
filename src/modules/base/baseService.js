@@ -1,4 +1,4 @@
-import { NotFound } from '../../utils/errors.js';
+import { NotFoundError } from '../../utils/errors.js';
 
 class BaseService {
   #repository;
@@ -19,36 +19,36 @@ class BaseService {
   async findById(id, option) {
     const data = await this.#repository.findById(id, option);
 
-    if (!data) throw new NotFound(`${this.serviceName} not found by id`);
+    if (!data) throw new NotFoundError(`${this.serviceName} not found by id`);
     return data;
   }
 
   async findOne(query, option) {
     const data = await this.#repository.findOne(query, option);
-    if (!data) throw new NotFound(`${this.serviceName} not found`);
+    if (!data) throw new NotFoundError(`${this.serviceName} not found`);
     return data;
   }
 
   async updateById(id, item) {
     const data = await this.#repository.updateById(id, item);
-    if (!data) throw new NotFound(`${this.serviceName} not found by id`);
+    if (!data) throw new NotFoundError(`${this.serviceName} not found by id`);
     return data;
   }
 
   async updateOne(query, item) {
     const data = await this.#repository.updateOne(query, item);
-    if (!data) throw new NotFound(`${this.serviceName} not found`);
+    if (!data) throw new NotFoundError(`${this.serviceName} not found`);
   }
 
   async deleteById(id) {
     const data = await this.#repository.deleteById(id);
-    if (!data) throw new NotFound(`${this.serviceName} not found by id`);
+    if (!data) throw new NotFoundError(`${this.serviceName} not found by id`);
     return data;
   }
 
   async deleteOne(id) {
     const data = await this.#repository.deleteOne(id);
-    if (!data) throw new NotFound(`${this.serviceName} not found by id`);
+    if (!data) throw new NotFoundError(`${this.serviceName} not found by id`);
     return data;
   }
 }
