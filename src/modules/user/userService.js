@@ -53,6 +53,25 @@ class UserService extends BaseService {
     if (!user) throw new NotFoundError('User Not Found by id');
     return user;
   }
+
+  /**
+   *
+   * @param {ObjectId} id - id must be mongodb object id
+   * @param {object} item  - user update data
+   * @returns {object} user updated data
+   * @throws {NotFoundError} - if user not found
+   */
+  async updateById(id, item) {
+    const user = { ...item };
+    if (item?.password) {
+      let saltRound = 10;
+      user.password = await bcrypt.hash(item.password, saltRound);
+    }
+    const data = await super.updateById(id, user);
+    if (!data) throw new NotFoundError('User Not Found By id');
+    delete data.password;
+    return data;
+  }
 }
 
 export default new UserService(userRepository);

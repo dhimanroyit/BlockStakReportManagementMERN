@@ -31,6 +31,21 @@ class UserController {
     const resDoc = responseHandler(200, 'user get successfully', user);
     res.status(resDoc.statusCode).json(resDoc);
   });
+
+  /**
+   * update user controller method
+   * @route GET /:id
+   * @access private
+   */
+  updateUser = catchErrors(async (req, res, next) => {
+    const {
+      params: { id },
+      body,
+    } = req;
+    const user = await userService.updateById(id, body);
+    const resDoc = responseHandler(200, 'user update successfully', user);
+    res.status(resDoc.statusCode).json(resDoc);
+  });
 }
 
 export default new UserController();
