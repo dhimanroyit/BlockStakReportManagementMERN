@@ -9,7 +9,7 @@ import { GeneralError } from '../../utils/errors.js';
 class UserController {
   /**
    * sign up new user controller method
-   * @route POST /signup
+   * @route POST /users/signup
    * @access public
    */
   signUpUser = catchErrors(async (req, res, next) => {
@@ -21,8 +21,19 @@ class UserController {
   });
 
   /**
+   * get all user controller method
+   * @route POST /users
+   * @access private
+   */
+  getAllUser = catchErrors(async (req, res, next) => {
+    const users = await userService.findAll({}, req.query);
+    const resDoc = responseHandler(201, 'users get successfully', users);
+    res.status(resDoc.statusCode).json(resDoc);
+  });
+
+  /**
    * get single user controller method
-   * @route GET /:id
+   * @route GET /users/:id
    * @access private
    */
   getUser = catchErrors(async (req, res, next) => {
@@ -34,7 +45,7 @@ class UserController {
 
   /**
    * update user controller method
-   * @route GET /:id
+   * @route PUT /users/:id
    * @access private
    */
   updateUser = catchErrors(async (req, res, next) => {
@@ -49,7 +60,7 @@ class UserController {
 
   /**
    * delete user controller method
-   * @route GET /:id
+   * @route DELETE /users/:id
    * @access private
    */
   deleteUser = catchErrors(async (req, res, next) => {

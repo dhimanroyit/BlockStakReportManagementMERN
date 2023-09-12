@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { ConflictError, NotFoundError } from '../../utils/errors.js';
+import { ConflictError } from '../../utils/errors.js';
 import BaseService from '../base/baseService.js';
 import userRepository from './userRepository.js';
 
@@ -40,6 +40,44 @@ class UserService extends BaseService {
     const userRes = { ...user._doc };
     delete userRes.password;
     return userRes;
+  }
+
+  /**
+   * get user all data with pagination
+   * @param {object} query
+   * @param {object} option - query string object with page, limit
+   * @returns {object} return all user data with pagination
+   */
+  async findAll(query, option) {
+    const { page, limit } = option;
+    const pageIndex = page > 0 ? parseInt(page) : 1;
+    const pageLimit = limit > 0 ? parseInt(limit) : 10;
+    const pageSkip = (pageIndex - 1) * pageLimit;
+    const isNextPage = pageIndex * pageLimit;
+    const result = {};
+    const pagination = {};
+    const data = await this.#repository.findAll(query, {
+      select: '-password',
+      skip: pageSkip,
+      limit: limit,
+    });
+    const totalUser = await this.#repository.countDocuments(query);
+    pagination.page = pageIndex;
+    pagination.limit = pageLimit;
+    pagination.totalPage = Math.ceil(totalUser / limit);
+    if (pageIndex > 1) {
+      pagination.prevPage = pageIndex - 1;
+    } else {
+      pagination.prevPage = null;
+    }
+    if (isNextPage < totalUser) {
+      pagination.nextPage = pageIndex + 1;
+    } else {
+      pagination.nextPage = null;
+    }
+    result.data = data;
+    result.pagination = pagination;
+    return result;
   }
 
   /**

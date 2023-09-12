@@ -72,6 +72,10 @@ class BaseRepository {
   async deleteOne(id) {
     return await this.#model.findOneAndDelete(id).lean().exec();
   }
+
+  async countDocuments(query) {
+    return await this.#model.countDocuments(query);
+  }
 }
 
 export default BaseRepository;
