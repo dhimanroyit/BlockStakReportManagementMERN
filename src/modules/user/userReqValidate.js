@@ -13,6 +13,7 @@ const schema = Joi.object({
   password: Joi.string().required(),
   profession: Joi.string().optional(),
   favoriteColor: Joi.string().optional(),
+  role: Joi.string().optional(),
 });
 
 const validate = (value) => {

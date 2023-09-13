@@ -3,7 +3,7 @@ import config from '../config/index.js';
 
 export const generateAccessToken = (payload) => {
   return Jwt.sign(payload, config.jwtAccessSecretKey, {
-    expiresIn: '1h',
+    expiresIn: '1m',
   });
 };
 

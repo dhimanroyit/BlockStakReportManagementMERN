@@ -21,13 +21,26 @@ class UserController {
   });
 
   /**
+   * create new user controller method
+   * @route POST /users
+   * @access private
+   */
+  createUser = catchErrors(async (req, res, next) => {
+    const { error } = validate(req.body);
+    if (error) throw new GeneralError(error.message);
+    const data = await userService.createUser(req.body);
+    const resDoc = responseHandler(201, 'user create successfully', data);
+    res.status(resDoc.statusCode).json(resDoc);
+  });
+
+  /**
    * get all user controller method
    * @route POST /users
    * @access private
    */
   getAllUser = catchErrors(async (req, res, next) => {
     const users = await userService.findAll({}, req.query);
-    const resDoc = responseHandler(201, 'users get successfully', users);
+    const resDoc = responseHandler(200, 'users get successfully', users);
     res.status(resDoc.statusCode).json(resDoc);
   });
 

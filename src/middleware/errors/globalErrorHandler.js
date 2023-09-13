@@ -15,9 +15,6 @@ import {
  */
 
 const globalErrorHandler = (err, req, res, next) => {
-  console.log('error', err);
-  console.log('error stack', err.stack);
-
   // default http status code for general error
   let code = 400;
   if (err instanceof BadRequestError) {

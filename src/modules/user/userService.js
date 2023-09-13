@@ -43,6 +43,25 @@ class UserService extends BaseService {
   }
 
   /**
+   * create admin user method
+   * @param {object} item - user data
+   * @returns {object} - created user data
+   * @throws {ConflictError} - if email are already use
+   */
+  async createUser(item) {
+    const { email } = item;
+    const query = {
+      email: email,
+    };
+    const isEmail = await this.#repository.findOne(query);
+    if (isEmail) throw new ConflictError('email are already use');
+    const user = await super.insertOne(item);
+    const userRes = { ...user._doc };
+    delete userRes.password;
+    return userRes;
+  }
+
+  /**
    * get user all data with pagination
    * @param {object} query
    * @param {object} option - query string object with page, limit
@@ -57,7 +76,7 @@ class UserService extends BaseService {
     const result = {};
     const pagination = {};
     const data = await this.#repository.findAll(query, {
-      select: '-password',
+      select: '-password -role',
       skip: pageSkip,
       limit: limit,
     });
@@ -86,7 +105,7 @@ class UserService extends BaseService {
    * @returns {object} user data
    */
   async findById(id) {
-    const user = await super.findById(id, { select: '-password' });
+    const user = await super.findById(id, { select: '-password -role' });
     return user;
   }
 

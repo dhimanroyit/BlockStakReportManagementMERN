@@ -15,6 +15,14 @@ class AuthService extends BaseService {
     this.#repository = repository;
   }
 
+  /**
+   * user sign in service method
+   *
+   * @param {object} credential - user credential with email & password
+   * @returns {object} return access token & refresh token
+   * @throws {UnauthorizedError} If the credential not match.
+   */
+
   async signIn(credential) {
     const { email, password } = credential;
     const user = await this.#repository.findOne({ email });
@@ -30,13 +38,19 @@ class AuthService extends BaseService {
     });
     return { accessToken, refreshToken };
   }
-
-  async refresh(headers) {
-    const bearer = headers.authorization || headers.Authorization;
-    if (!bearer || !bearer.startsWith('Bearer ')) {
-      throw new BadRequestError('token to exist');
+  /**
+   * Refreshes an access token and generates a new tokens.
+   *
+   * @param {object} headers - HTTP request headers object containing the authorization header.
+   * @returns {object} An object containing the new access token and refresh token.
+   * @throws {BadRequestError} If the authorization header is missing or in an invalid format.
+   */
+  async refresh(cookies) {
+    const cookiesToken = cookies['refreshToken'];
+    if (!cookiesToken || !cookiesToken.startsWith('Bearer ')) {
+      throw new BadRequestError('token not exist');
     }
-    const token = bearer.split('Bearer ')[1].trim();
+    const token = cookiesToken.split('Bearer ')[1].trim();
     const decode = await verifyRefreshToken(token);
     const user = await this.#repository.findById(decode.userInfo.id);
     const accessToken = generateAccessToken({

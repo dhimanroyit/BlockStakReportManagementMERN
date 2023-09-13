@@ -7,7 +7,7 @@ class BaseService {
     this.serviceName = serviceName;
   }
   async insertOne(item) {
-    const data = this.#repository.insertOne(item);
+    const data = await this.#repository.insertOne(item);
     return data;
   }
 
