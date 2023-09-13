@@ -30,6 +30,23 @@ class AuthService extends BaseService {
     });
     return { accessToken, refreshToken };
   }
+
+  async refresh(headers) {
+    const bearer = headers.authorization || headers.Authorization;
+    if (!bearer || !bearer.startsWith('Bearer ')) {
+      throw new BadRequestError('token to exist');
+    }
+    const token = bearer.split('Bearer ')[1].trim();
+    const decode = await verifyRefreshToken(token);
+    const user = await this.#repository.findById(decode.userInfo.id);
+    const accessToken = generateAccessToken({
+      userInfo: { id: user._id, name: user.name, role: user.role },
+    });
+    const refreshToken = generateRefreshToken({
+      userInfo: { id: user._id },
+    });
+    return { accessToken, refreshToken };
+  }
 }
 
 export default new AuthService(authRepository, 'authentication');

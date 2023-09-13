@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import config from './config/index.js';
 import dbConnect from './db/dbConnect.js';
@@ -12,6 +13,8 @@ const app = express();
 app.use(express.json());
 // parse incoming URL-encoded data from requests
 app.use(express.urlencoded({ extended: true }));
+// parse incoming cookie from request
+app.use(cookieParser());
 // enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
 
